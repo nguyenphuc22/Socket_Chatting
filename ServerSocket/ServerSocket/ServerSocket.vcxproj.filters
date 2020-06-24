@@ -36,6 +36,12 @@
     <ClInclude Include="ServerManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ChatStruct.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="eManager.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ServerSocket.cpp">
@@ -49,6 +55,9 @@
     </ClCompile>
     <ClCompile Include="ServerManager.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ChatStruct.cpp">
+      <Filter>Resource Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
