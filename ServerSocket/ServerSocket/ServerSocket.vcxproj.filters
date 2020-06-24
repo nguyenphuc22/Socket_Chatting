@@ -48,6 +48,12 @@
     <ClInclude Include="SignupStruct.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
+    <ClInclude Include="ResponseSignupStruct.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ManagerStruct.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ServerSocket.cpp">
@@ -69,6 +75,12 @@
       <Filter>Resource Files</Filter>
     </ClCompile>
     <ClCompile Include="SignupStruct.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ResponseSignupStruct.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ManagerStruct.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
   </ItemGroup>

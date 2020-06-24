@@ -3,8 +3,9 @@
 #include "ServerSocket.h"
 #include "ServerSOcketDlg.h"
 #include <Windows.h>
-#include<winsock2.h>
-#include<WS2tcpip.h>
+#include <winsock2.h>
+#include <WS2tcpip.h>
+#include <fstream>
 
 static SOCKET sArray[100];
 static int iCount;
@@ -165,4 +166,137 @@ void ServerManager::SetStaticVariable(int iC, SOCKET cS)
 {
     iCount = iC;
     sArray[iCount] = cS;
+}
+
+bool ServerManager::signup(string userName, string passWord, SOCKET & socket) {
+
+    string error = "";
+    if (checkSignup(userName, passWord, error))
+    {
+        signupResponse(true, error, socket);
+
+        //update client list
+
+        return true;
+    }
+    // Signup Fail
+
+    signupResponse(false, error, socket);
+
+
+    return false;
+}
+
+void ServerManager::signupResponse(bool isSucc, string errorMsg, SOCKET & socket) {
+
+    ResponseSignupStruct* responseSignupStruct = new ResponseSignupStruct(isSucc, errorMsg);
+
+    vector<char> data = responseSignupStruct->pack();
+
+    send(socket, &data[0], data.size(), 0);
+}
+
+bool ServerManager::checkLogin(string userName, string passWord, string& errorMsg) {
+    // check empty
+    if (userName.empty() || passWord.empty())
+    {
+        errorMsg = "Username or Password can't be blank!";
+        return false;
+    }
+
+    if (!checkAccount(userName, passWord, errorMsg))
+    {
+        return false;
+    }
+    // not finish
+    return true;
+}
+bool ServerManager::checkAccount(string username, string password, string& errorMsg) {
+
+    ifstream fileInput(this->accountPath);
+
+    if (fileInput.fail())
+    {
+        errorMsg = "Can't not open file database";
+        return false;
+    }
+    string tmp, tmp1, tmp2;
+    while (!fileInput.eof())
+    {
+
+        getline(fileInput, tmp);
+        getline(fileInput, tmp1);
+        tmp2 = username + password;
+
+        if (tmp2 == (tmp1 + tmp))
+        {
+            return true;
+        }
+    }
+    errorMsg = "Username or Password is not correct!";
+    return false;
+}
+bool ServerManager::checkSignup(string username, string password, string& errorMsg) {
+
+    // check empty
+    if (username.empty() || password.empty())
+    {
+        errorMsg = "Username or Password can't be blank!";
+        return false;
+    }
+
+    //Check exists username in database
+    if (checkAccountExists(username))
+    {
+        errorMsg = "This username has been registered!";
+        return false;
+    }
+
+    if (!addAnAccountToDatabase(username, password))
+    {
+        errorMsg = "Can't register!";
+        return false;
+    }
+
+
+    return true;
+}
+bool ServerManager::checkAccountExists(string username) {
+
+    ifstream fileInput(this->accountPath);
+
+    if (fileInput.fail())
+    {
+        return false;
+    }
+    string tmp;
+    while (!fileInput.eof())
+    {
+        getline(fileInput, tmp);
+
+        if (tmp == username)
+        {
+            return true;
+        }
+        // skip line password
+        getline(fileInput, tmp);
+    }
+
+    return false;
+}
+bool ServerManager::addAnAccountToDatabase(string username, string password) {
+    // Mode write file the end postion
+    ofstream fileOutput(this->accountPath, std::ios::app);
+
+    if (fileOutput.fail())
+    {
+        return false;
+    }
+
+    fileOutput << username << endl;
+    fileOutput << password << endl;
+
+    fileOutput.close();
+
+    return true;
 }
