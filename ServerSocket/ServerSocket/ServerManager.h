@@ -1,7 +1,7 @@
 #pragma once
 
 #include<winsock2.h>
-#include "ManagerStruct.h"
+#include "SocketManager.h"
 class CServerSocketDlg;
 
 #pragma comment(lib,"ws2_32.lib")
@@ -15,6 +15,7 @@ public:
 	static UINT DataThreadFunc(LPVOID pParam);
 	WSADATA wsa;
 	SOCKET s, new_socket;
+	SocketManager socketManager;
 	//static SOCKET sArray[100];
 	struct sockaddr_in server, client;
 	int c;
@@ -28,16 +29,5 @@ public:
 	void StartListening(int iPort);
 
 public:
-	string accountPath = "../database.txt";
-	// helper
-	bool checkLogin(string userName, string passWord, string& errorMsg);
-	bool checkAccount(string username, string password, string& errorMsg);
-	bool checkSignup(string username, string password, string& errorMsg);
-	bool checkAccountExists(string username);
-	bool addAnAccountToDatabase(string username, string password);
-
-
-	bool signup(string userName, string passWord, SOCKET & socket);
-	void signupResponse(bool isSucc, string errorMsg, SOCKET & socket);
-
+	
 };

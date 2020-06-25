@@ -36,6 +36,48 @@
     <ClInclude Include="ClientManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="eManager.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ChatStruct.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LoginStruct.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SignupStruct.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ResponseSignupStruct.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ManagerStruct.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ResponseLoginStruct.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LoginNotification.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LogoutStruct.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UserOnlineStruct.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="User.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ChatpublicStruct.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ChatprivateStruct.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LogoutNotification.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ClientSocket.cpp">
@@ -49,6 +91,42 @@
     </ClCompile>
     <ClCompile Include="ClientManager.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ChatStruct.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LoginStruct.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SignupStruct.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ResponseSignupStruct.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ManagerStruct.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ResponseLoginStruct.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LoginNotification.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LogoutStruct.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UserOnlineStruct.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ChatpublicStruct.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ChatprivateStruct.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LogoutNotification.cpp">
+      <Filter>Resource Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

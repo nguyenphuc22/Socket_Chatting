@@ -49,9 +49,21 @@ public:
 	UINT ThreadFunc();
 	void AppendTextToEditCtrl(CEdit& edit, LPCTSTR pszText);
 	CEdit m_Portbox;
+	void AppString(string msg);
+	void AppStringOnline(string msg);
+	void DeleteStringListBox(string userName);
+	void AppStringComboBox(string msg);
 private:
 	HANDLE m_Thread_handle;
 	CWinThread* cTh;
 public:
 	CEdit edt_val_port;
+	afx_msg void OnBnClickedButtonLogin();
+	CListBox chatbox_val;
+	CListBox listonline_val;
+	afx_msg void OnBnClickedButton1();
+	afx_msg void OnBnClickedButtonSend();
+	CEdit edt_val_message;
+	CComboBox combo_val_chat;
+	afx_msg void OnCbnSelchangeCombo1();
 };

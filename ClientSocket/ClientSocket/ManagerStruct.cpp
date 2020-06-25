@@ -103,8 +103,8 @@ ChatStruct* ManagerStruct::unpack(vector<char> buff) {
 
 		result->mesageType = MessageType::publicMessage;
 
-		result->unpack(buff);
 
+		result->unpack(buff);
 
 		break;
 	}
@@ -114,8 +114,8 @@ ChatStruct* ManagerStruct::unpack(vector<char> buff) {
 
 		result->mesageType = MessageType::privateMessage;
 
-		result->unpack(buff);
 
+		result->unpack(buff);
 
 		break;
 	}
@@ -124,7 +124,6 @@ ChatStruct* ManagerStruct::unpack(vector<char> buff) {
 	case userStatus:
 	{
 		result = new UserOnlineStruct();
-
 		result->mesageType = MessageType::userStatus;
 
 		result->unpack(buff);
@@ -174,7 +173,15 @@ ChatStruct* ManagerStruct::unpack(vector<char> buff) {
 		break;
 	}
 	case loginNotification:
+	{
+		result = new LoginNotification();
+
+		result->mesageType = MessageType::loginNotification;
+
+		result->unpack(buff);
+
 		break;
+	}
 	case logoutNotification:
 	{
 		result = new LogoutStruct();

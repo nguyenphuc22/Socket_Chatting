@@ -8,7 +8,6 @@
 #include "ClientSocketDlg.h"
 #include "afxdialogex.h"
 #include <string.h>
-
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -64,7 +63,10 @@ void CClientSocketDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_EDIT_Password, edt_val_password);
 	DDX_Control(pDX, IDC_BUTTON_Login, btn_val_login);
 	DDX_Control(pDX, IDC_BUTTON_Signup, btn_val_signup);
-	DDX_Control(pDX, IDC_EDIT_Port, edt_val_port);
+	DDX_Control(pDX, IDC_LIST_ChatBox, chatbox_val);
+	DDX_Control(pDX, IDC_LIST_Chat, listonline_val);
+	DDX_Control(pDX, IDC_EDIT_Message, edt_val_message);
+	DDX_Control(pDX, IDC_COMBO1, combo_val_chat);
 }
 
 BEGIN_MESSAGE_MAP(CClientSocketDlg, CDialogEx)
@@ -72,6 +74,10 @@ BEGIN_MESSAGE_MAP(CClientSocketDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	ON_BN_CLICKED(IDC_BUTTON_Signup, &CClientSocketDlg::OnBnClickedButtonSignup)
+	ON_BN_CLICKED(IDC_BUTTON_Login, &CClientSocketDlg::OnBnClickedButtonLogin)
+	ON_BN_CLICKED(IDC_BUTTON1, &CClientSocketDlg::OnBnClickedButton1)
+	ON_BN_CLICKED(IDC_BUTTON_Send, &CClientSocketDlg::OnBnClickedButtonSend)
+	ON_CBN_SELCHANGE(IDC_COMBO1, &CClientSocketDlg::OnCbnSelchangeCombo1)
 END_MESSAGE_MAP()
 
 
@@ -107,6 +113,16 @@ BOOL CClientSocketDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// Set small icon
 
 	// TODO: Add extra initialization here
+
+	cTh = AfxBeginThread(
+		StaticThreadFunc,
+		this);
+
+	//cTh->m_bAutoDelete = FALSE;
+	m_Thread_handle = cTh->m_hThread;
+
+	this->combo_val_chat.AddString(_T("Public"));
+	this->combo_val_chat.SetCurSel(0);
 
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
@@ -179,14 +195,57 @@ void CClientSocketDlg::AppendTextToEditCtrl(CEdit& edit, LPCTSTR pszText)
 	edit.ReplaceSel(pszText);
 }
 
+void CClientSocketDlg::AppString(string msg)
+{
+	CString a(msg.c_str(), msg.length());
+	chatbox_val.AddString(a);
+}
+void CClientSocketDlg::AppStringOnline(string msg)
+{
+	CString a(msg.c_str(), msg.length());
+	listonline_val.AddString(a);
+	
+}
+
+void CClientSocketDlg::AppStringComboBox(string msg)
+{
+	CString a(msg.c_str(), msg.length());
+	combo_val_chat.AddString(a);
+
+}
+
+void CClientSocketDlg::DeleteStringListBox(string userName) {
+
+	CString username(userName.c_str(), userName.length());
+
+	LPCTSTR lpszmyString = username.operator LPCTSTR();
+
+	int nIndex = 0;
+	while ((nIndex = listonline_val.FindString(nIndex, lpszmyString)) != LB_ERR)
+	{
+		listonline_val.DeleteString(nIndex);
+	}
+}
+
 void CClientSocketDlg::OnBnClickedButtonSignup()
 {
-	cTh = AfxBeginThread(
-		StaticThreadFunc,
-		this);
+	CString userName;
+	CString passWord;
 
-	//cTh->m_bAutoDelete = FALSE;
-	m_Thread_handle = cTh->m_hThread;
+	edt_val_username.GetWindowTextW(userName);
+
+	edt_val_password.GetWindowTextW(passWord);
+
+	if (userName.IsEmpty() || passWord.IsEmpty())
+	{
+		MessageBox(_T("UserName or PassWord is empty!"));
+	}
+
+	string sUsername(CW2A(userName.GetString()));
+
+	string sPassword(CW2A(passWord.GetString()));
+
+	this->m_pClient->signupfunc(sUsername,sPassword,this->m_pClient->s);
 }
 
 UINT CClientSocketDlg::ThreadFunc() {
@@ -203,10 +262,9 @@ UINT CClientSocketDlg::ThreadFunc() {
 
 	edt_val_password.GetWindowTextW(txtpassword);
 
-	CString portname;
-	edt_val_port.GetWindowTextW(portname);
+	
 
-	int iPort = _ttoi(portname);
+	int iPort = 6666;
 
 	m_pClient = new ClientManager(this);
 
@@ -230,4 +288,96 @@ UINT CClientSocketDlg::StaticThreadFunc(LPVOID pParam)
 	UINT retCode = pYourClass->ThreadFunc();
 
 	return retCode;
+}
+
+
+void CClientSocketDlg::OnBnClickedButtonLogin()
+{
+	// TODO: Add your control notification handler code here
+	CString userName;
+	CString passWord;
+
+	edt_val_username.GetWindowTextW(userName);
+
+	edt_val_password.GetWindowTextW(passWord);
+
+	if (userName.IsEmpty() || passWord.IsEmpty())
+	{
+		MessageBox(_T("UserName or PassWord is empty!"));
+	}
+
+	string sUsername(CW2A(userName.GetString()));
+
+	string sPassword(CW2A(passWord.GetString()));
+
+
+	this->m_pClient->loginfunc(sUsername,sPassword,this->m_pClient->s);
+
+}
+
+
+void CClientSocketDlg::OnBnClickedButton1()
+{
+	CString userName = _T("");
+	edt_val_username.GetWindowTextW(userName);
+
+
+	LPCTSTR lpszmyString = userName.operator LPCTSTR();
+
+	// Delete all items that begin with the specified string.
+	int nIndex = 0;
+	while ((nIndex = listonline_val.FindString(nIndex, lpszmyString)) != LB_ERR)
+	{
+		listonline_val.DeleteString(nIndex);
+	}
+
+	string sUsername(CW2A(userName.GetString()));
+	this->AppString(sUsername + " Log Out");
+
+	this->m_pClient->logoutNoti(sUsername, this->m_pClient->s);
+
+	delete m_pClient;
+}
+
+
+void CClientSocketDlg::OnBnClickedButtonSend()
+{
+	CString msg = _T("");
+
+	CString userName = _T("");
+
+	UpdateData(TRUE);
+
+	this->edt_val_message.GetWindowTextW(msg);
+
+
+	string sMsg(CW2A(msg.GetString()));
+
+	int index = combo_val_chat.GetCurSel();
+
+	CString who = _T("Public");
+
+	this->combo_val_chat.GetLBText(index, who);
+
+	string sMode(CW2A(who.GetString()));
+
+	if (sMode == "Public")
+	{
+		
+		this->m_pClient->publicmessage(sMsg, this->m_pClient->s);
+
+	}
+	else {
+
+		this->m_pClient->privatemessage(sMode,sMsg,this->m_pClient->s);
+
+	}
+
+
+}
+
+
+void CClientSocketDlg::OnCbnSelchangeCombo1()
+{
+	// TODO: Add your control notification handler code here
 }

@@ -55,4 +55,6 @@ public:
 	afx_msg void OnEnChangeEditChat();
 	afx_msg void OnLbnSelchangeListNotifications();
 	CListBox list_val_notifi;
+	afx_msg void OnEnChangeEditPort();
+	afx_msg void OnBnClickedOk();
 };

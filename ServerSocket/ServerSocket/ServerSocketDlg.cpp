@@ -59,10 +59,7 @@ CServerSocketDlg::CServerSocketDlg(CWnd* pParent /*=nullptr*/)
 void CServerSocketDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
-	DDX_Control(pDX, IDC_EDIT_PORT, edt_val_port);
 	DDX_Control(pDX, IDC_BUTTON_LISTEN, btn_val_listen);
-	DDX_Control(pDX, IDC_EDIT_Username, edt_val_username);
-	DDX_Control(pDX, IDC_EDIT_Password, edt_val_password);
 	DDX_Control(pDX, IDC_LIST_Notifications, list_val_notifi);
 }
 
@@ -73,6 +70,8 @@ BEGIN_MESSAGE_MAP(CServerSocketDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON_LISTEN, &CServerSocketDlg::OnBnClickedButtonListen)
 	ON_EN_CHANGE(IDC_EDIT_Chat, &CServerSocketDlg::OnEnChangeEditChat)
 	ON_LBN_SELCHANGE(IDC_LIST_Notifications, &CServerSocketDlg::OnLbnSelchangeListNotifications)
+	ON_EN_CHANGE(IDC_EDIT_PORT, &CServerSocketDlg::OnEnChangeEditPort)
+	ON_BN_CLICKED(IDOK, &CServerSocketDlg::OnBnClickedOk)
 END_MESSAGE_MAP()
 
 
@@ -163,13 +162,8 @@ HCURSOR CServerSocketDlg::OnQueryDragIcon()
 
 UINT CServerSocketDlg::ThreadFunc() {
 	// Do your thing, this thread now has access to all the classes member variables
-	CString txtUsername,txtPassword,txtPort;
-	
-	edt_val_username.GetWindowTextW(txtUsername);
-	edt_val_password.GetWindowTextW(txtPassword);
-	edt_val_port.GetWindowTextW(txtPort);
 
-	int iPort = _ttoi(txtPort);
+	int iPort = 6666;
 
 	if (iPort == 0)
 	{
@@ -234,4 +228,25 @@ void CServerSocketDlg::OnLbnSelchangeListNotifications()
 	if (index != LB_ERR) {
 		//AfxMessageBox("111");
 	}
+}
+
+
+void CServerSocketDlg::OnEnChangeEditPort()
+{
+	// TODO:  If this is a RICHEDIT control, the control will not
+	// send this notification unless you override the CDialogEx::OnInitDialog()
+	// function and call CRichEditCtrl().SetEventMask()
+	// with the ENM_CHANGE flag ORed into the mask.
+
+	// TODO:  Add your control notification handler code here
+}
+
+
+void CServerSocketDlg::OnBnClickedOk()
+{
+	this->server->socketManager.logoutNoti("Server Out", this->server->s);
+
+	CloseHandle(m_Thread_handle);
+
+	delete server;
 }
